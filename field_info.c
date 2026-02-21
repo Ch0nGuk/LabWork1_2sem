@@ -32,14 +32,15 @@ void complex_add(void* element1, void* element2, void* result)
     res->re = el1->re + el2->re;
 }
 
-void complex_mul(void* element1, void* element2, void* result)
-{
+void complex_mult(void* element1, void* element2, void* result) {
     Complex* el1 = (Complex*)element1;
     Complex* el2 = (Complex*)element2;
-    Complex* res = (Complex*)result;
+    Complex res_tmp;
 
-    res->re = (el1->re) * (el2->re) - (el1->im) * (el2->im);
-    res->im = (el1->re) * (el2->im) + (el1->im) * (el2->re);
+    res_tmp.re = (el1->re) * (el2->re) - (el1->im) * (el2->im);
+    res_tmp.im = (el1->re) * (el2->im) + (el1->im) * (el2->re);
+
+    *(Complex*)result = res_tmp;
 }
 
 void complex_print(void* element)
@@ -67,7 +68,7 @@ FieldInfo* GetComplexFieldInfo()
     {
         COMPLEX_FIELD_INFO = (FieldInfo*)malloc(sizeof(FieldInfo));
         COMPLEX_FIELD_INFO->add = complex_add;
-        COMPLEX_FIELD_INFO->mult = complex_mul;
+        COMPLEX_FIELD_INFO->mult = complex_mult;
         COMPLEX_FIELD_INFO->print = complex_print;
         COMPLEX_FIELD_INFO->size = sizeof(Complex);
     }
