@@ -45,7 +45,7 @@ void complex_mul(void* element1, void* element2, void* result)
 void complex_print(void* element)
 {
     Complex* el = (Complex*)element;
-    printf("%.2f %c %.2fi", el->re, (el->im > 0 ? '+': '-'),fabs(el->im));
+    printf("(%.2f %c %.2fi)", el->re, (el->im >= 0 ? '+': '-'),fabs(el->im));
 }
 
 FieldInfo* GetIntFieldInfo()
