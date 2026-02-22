@@ -1,9 +1,9 @@
 #ifndef FIELD_INFO_H
 #define FIELD_INFO_H
+
 #include <stddef.h>
 
-typedef struct FieldInfo
-{
+typedef struct FieldInfo {
     size_t size;
 
     void (*add)(void* a, void* b, void* res);
@@ -12,14 +12,13 @@ typedef struct FieldInfo
     void (*print)(void* element);
 } FieldInfo;
 
-typedef struct Complex
-{
+typedef struct Complex {
     double re;
     double im;
 } Complex;
 
-
 FieldInfo* GetIntFieldInfo();
+
 FieldInfo* GetComplexFieldInfo();
 
-#endif // FIELD_INFO_H
+#endif
