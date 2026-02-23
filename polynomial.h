@@ -13,8 +13,6 @@ Polynomial* CreatePolynomial(FieldInfo* FInfo, int degree);
 
 void FreePolynomial(Polynomial* Poly);
 
-void* GetCoeffPtr(Polynomial* poly, int index);
-
 void SetCoeff(Polynomial* poly, int index, void* src);
 
 void PrintPolynomial(Polynomial* poly);

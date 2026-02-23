@@ -5,6 +5,7 @@
 #include "field_info.h"
 
 Polynomial* CreatePolynomial(FieldInfo* FInfo, int degree) {
+
     Polynomial* poly = (Polynomial*)malloc(sizeof(Polynomial));
 
     if (poly == NULL) {
@@ -24,6 +25,7 @@ Polynomial* CreatePolynomial(FieldInfo* FInfo, int degree) {
     memset(poly->coefficients, 0, FInfo->size * poly->count);
 
     return poly;
+
 }
 
 void FreePolynomial(Polynomial* poly) {
@@ -37,23 +39,27 @@ void FreePolynomial(Polynomial* poly) {
     }
 
     free(poly);
+
 }
 
-void* GetCoeffPtr(Polynomial* poly, int index) {
+static void* GetCoeffPtr(Polynomial* poly, int index) {
 
     if (poly == NULL || index < 0 || index >= (int)poly->count) {
         return NULL;
     }
 
     return (char*)poly->coefficients + (index * poly->polynomial_type->size);
+
 }
 
 void SetCoeff(Polynomial* poly, int index, void* src) {
+
     void* target = GetCoeffPtr(poly, index);
 
     if (target != NULL && src != NULL) {
         memcpy(target, src, poly->polynomial_type->size);
     }
+
 }
 
 void PrintPolynomial(Polynomial* poly) {
@@ -72,8 +78,7 @@ void PrintPolynomial(Polynomial* poly) {
             printf("*x + ");
         }
     }
-
-    printf("\n");
+    
 }
 
 void EvaluatePolynomial(Polynomial* poly, void* dot, void* result) {
@@ -90,9 +95,11 @@ void EvaluatePolynomial(Polynomial* poly, void* dot, void* result) {
         void* current_coeff = GetCoeffPtr(poly, degree);
         poly->polynomial_type->add(result, current_coeff, result);
     }
+
 }
 
 void AddPolynomial(Polynomial* poly1, Polynomial* poly2, Polynomial* result_poly) {
+
     void* temp_sum = malloc(poly1->polynomial_type->size);
 
     if (temp_sum == NULL) {
@@ -117,6 +124,7 @@ void AddPolynomial(Polynomial* poly1, Polynomial* poly2, Polynomial* result_poly
     }
 
     free(temp_sum);
+
 }
 
 void ScalarMult(Polynomial* poly, void* scalar) {
@@ -129,6 +137,7 @@ void ScalarMult(Polynomial* poly, void* scalar) {
         void* coef = GetCoeffPtr(poly, degree);
         poly->polynomial_type->mult(coef, scalar, coef);
     }
+
 }
 
 void PolynomialMult(Polynomial* poly1, Polynomial* poly2, Polynomial* result_poly) {
@@ -162,4 +171,5 @@ void PolynomialMult(Polynomial* poly1, Polynomial* poly2, Polynomial* result_pol
     }
 
     free(new_coef);
+
 }

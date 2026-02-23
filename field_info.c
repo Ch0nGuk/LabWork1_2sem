@@ -7,19 +7,19 @@
 static FieldInfo* INT_FIELD_INFO = NULL;
 static FieldInfo* COMPLEX_FIELD_INFO = NULL;
 
-void int_add(void* element1, void* element2, void* result) {
+static void int_add(void* element1, void* element2, void* result) {
     *(int*)result = *(int*)element1 + *(int*)element2;
 }
 
-void int_mul(void* element1, void* element2, void* result) {
+static void int_mul(void* element1, void* element2, void* result) {
     *(int*)result = (*(int*)element1) * (*(int*)element2);
 }
 
-void int_print(void* element) {
+static void int_print(void* element) {
     printf("%d", *(int*)element);
 }
 
-void complex_add(void* element1, void* element2, void* result) {
+static void complex_add(void* element1, void* element2, void* result) {
     Complex* res = (Complex*)result;
     Complex* el1 = (Complex*)element1;
     Complex* el2 = (Complex*)element2;
@@ -28,7 +28,7 @@ void complex_add(void* element1, void* element2, void* result) {
     res->re = el1->re + el2->re;
 }
 
-void complex_mult(void* element1, void* element2, void* result) {
+static void complex_mult(void* element1, void* element2, void* result) {
     Complex* el1 = (Complex*)element1;
     Complex* el2 = (Complex*)element2;
     Complex res_tmp;
@@ -39,7 +39,7 @@ void complex_mult(void* element1, void* element2, void* result) {
     *(Complex*)result = res_tmp;
 }
 
-void complex_print(void* element) {
+static void complex_print(void* element) {
     Complex* el = (Complex*)element;
     printf("(%.2f %c %.2fi)", el->re, (el->im >= 0 ? '+': '-'), fabs(el->im));
 }
