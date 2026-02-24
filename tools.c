@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "util.h"
+#include "tools.h"
 
 
 static char* strip_str(char* str)

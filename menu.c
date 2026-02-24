@@ -3,7 +3,7 @@
 #include <string.h>
 #include "polynomial.h"
 #include "field_info.h"
-#include "util.h"
+#include "tools.h"
 
 
 
