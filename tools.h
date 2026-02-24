@@ -8,6 +8,7 @@ typedef enum
     DOUBLE_TYPE
 } NumType;
 
+void PrintListOfPolynomials(Polynomial* arr[], int count_polys);
 
 int read_num(void* str, NumType type);
 

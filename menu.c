@@ -150,6 +150,10 @@ void menu()
                 }
 
                 printf("Succesfull create complex polynomial!\n");
+                printf("New polynomials:\n");
+
+                PrintPolynomial(polys[poly_id - 1]);
+                printf("\n");
                 break;
 
             default:
@@ -170,7 +174,9 @@ void menu()
                 continue;
             }
 
-            printf("There are %d polynomials now\nWhich polynomial do you want to select?\nChoice:  ", poly_id);
+            printf("There are %d polynomials now\n", poly_id);
+            PrintListOfPolynomials(polys, poly_id);
+            printf("Which polynomials do you want to select?\nChoice:  ");
 
             int poly_number;
             
@@ -181,7 +187,7 @@ void menu()
             }
             printf("\n");
 
-            if (poly_number > poly_id || poly_number < 0)
+            if (poly_number > poly_id || poly_number <= 0)
             {
                 printf("ERROR! Wrong number\n");
                 continue;
@@ -199,7 +205,7 @@ void menu()
             }
             printf("\n");
 
-            if (coeff_number > (int)poly->count - 1 || coeff_number < 0)
+            if (coeff_number > (int)poly->count - 1 || coeff_number <= 0)
             {
                 printf("ERROR! Wrong coefficient\n");
                 continue;
@@ -261,7 +267,9 @@ void menu()
                 continue;
             }
 
-            printf("There are %d polynomials now\nWhich polynomial do you want to print?\nChoice:  ", poly_id);
+            printf("There are %d polynomials now\n", poly_id);
+            PrintListOfPolynomials(polys, poly_id);
+            printf("Which polynomials do you want to select?\nChoice:  ");
 
             int poly_number;
             
@@ -272,7 +280,7 @@ void menu()
             }
             printf("\n");
 
-            if (poly_number > poly_id || poly_number < 0)
+            if (poly_number > poly_id || poly_number <= 0)
             {
                 printf("ERROR! Wrong number\n");
                 continue;
@@ -295,8 +303,9 @@ void menu()
                 continue;
             }
 
-            printf("There are %d polynomials now\nWhich polynomial do you want to print?\nChoice:  ", poly_id);
-
+            printf("There are %d polynomials now\n", poly_id);
+            PrintListOfPolynomials(polys, poly_id);
+            printf("Which polynomials do you want to select?\nChoice:  ");
             int poly_number;
             
             if (!read_num(&poly_number, INT_TYPE))
@@ -306,7 +315,7 @@ void menu()
             }
             printf("\n");
 
-            if (poly_number > poly_id || poly_number < 0)
+            if (poly_number > poly_id || poly_number <= 0)
             {
                 printf("ERROR! Wrong number\n");
                 continue;
@@ -381,7 +390,9 @@ void menu()
 
             int first_num, second_num;
 
-            printf("There are %d polynomials\nWrite first polynomial:   ", poly_id);
+            printf("There are %d polynomials\n", poly_id);
+            PrintListOfPolynomials(polys, poly_id);
+            printf("Write first polynomial:   ");
 
             if (!read_num(&first_num, INT_TYPE))
             {
@@ -389,7 +400,7 @@ void menu()
                 continue;
             }
 
-            if (first_num > poly_id || first_num < 0)
+            if (first_num > poly_id || first_num <= 0)
             {
                 printf("ERROR! Wrong number\n");
                 continue;
@@ -404,7 +415,7 @@ void menu()
                 continue;
             }
 
-            if (second_num > poly_id || second_num < 0)
+            if (second_num > poly_id || second_num <= 0)
             {
                 printf("ERROR! Wrong number\n");
                 continue;
@@ -454,7 +465,9 @@ void menu()
                 continue;
             }
 
-            printf("There are %d polynomials now\nWhich polynomial do you want to print?\nChoice:  ", poly_id);
+            printf("There are %d polynomials now\n", poly_id);
+            PrintListOfPolynomials(polys, poly_id);
+            printf("Which polynomials do you want to select?\nChoice:  ");
 
             int poly_number;
             
@@ -537,7 +550,9 @@ void menu()
 
             int first_num, second_num;
 
-            printf("There are %d polynomials\nWrite first polynomial:   ", poly_id);
+            printf("There are %d polynomials\n", poly_id);
+            PrintListOfPolynomials(polys, poly_id);
+            printf("Write first polynomial:   ");
 
             if (!read_num(&first_num, INT_TYPE))
             {
@@ -545,7 +560,7 @@ void menu()
                 continue;
             }
 
-            if (first_num > poly_id || first_num < 0)
+            if (first_num > poly_id || first_num <= 0)
             {
                 printf("ERROR! Wrong number\n");
                 continue;
@@ -560,7 +575,7 @@ void menu()
                 continue;
             }
 
-            if (second_num > poly_id || second_num < 0)
+            if (second_num > poly_id || second_num <= 0)
             {
                 printf("ERROR! Wrong number\n");
                 continue;

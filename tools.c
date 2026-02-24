@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "polynomial.h"
 #include "tools.h"
+
 
 
 static char* strip_str(char* str)
@@ -62,9 +64,12 @@ int read_num(void* str, NumType type)
 }
 
 
-int is_complex(double* re, double* im)
+void PrintListOfPolynomials(Polynomial* arr[], int count_polys)
 {
-    if ( read_num(re, DOUBLE_TYPE) && read_num(im, DOUBLE_TYPE) ) return 1;
-
-    return 0;
+    for (int number = 0; number < count_polys; number++)
+    {
+        printf("%d.  ", number + 1);
+        PrintPolynomial(arr[number]);
+        printf("\n");
+    }
 }
