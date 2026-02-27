@@ -6,6 +6,8 @@
 
 Polynomial* CreatePolynomial(FieldInfo* FInfo, int degree) {
 
+    if (degree < 0) return NULL;
+
     Polynomial* poly = (Polynomial*)malloc(sizeof(Polynomial));
 
     if (poly == NULL) {
@@ -100,6 +102,8 @@ void EvaluatePolynomial(Polynomial* poly, void* dot, void* result) {
 
 void AddPolynomial(Polynomial* poly1, Polynomial* poly2, Polynomial* result_poly) {
 
+    if (poly1->polynomial_type != poly2->polynomial_type || poly1->polynomial_type != result_poly->polynomial_type) return;
+
     void* temp_sum = malloc(poly1->polynomial_type->size);
 
     if (temp_sum == NULL) {
@@ -142,6 +146,8 @@ void ScalarMult(Polynomial* poly, void* scalar) {
 
 void PolynomialMult(Polynomial* poly1, Polynomial* poly2, Polynomial* result_poly) {
 
+    if (poly1->polynomial_type != poly2->polynomial_type || poly1->polynomial_type != result_poly->polynomial_type) return;
+
     if (poly1 == NULL || poly2 == NULL || result_poly == NULL) {
         return;
     }
@@ -173,3 +179,28 @@ void PolynomialMult(Polynomial* poly1, Polynomial* poly2, Polynomial* result_pol
     free(new_coef);
 
 }
+
+
+void DerivativeOfPolynomial(Polynomial* poly, Polynomial* diff_poly)
+{
+    if (poly == NULL || diff_poly == NULL) return;
+
+    if (poly->polynomial_type != diff_poly->polynomial_type) return;
+
+    if ((int)diff_poly->count < (int)poly->count - 1 || (int)poly->count == 1) return;
+
+    void* tmp_coeff = malloc(sizeof(poly->polynomial_type->size));
+    if (!tmp_coeff) return;
+
+    for (int degree = poly->count - 1; degree > 0; degree--)
+    {
+        tmp_coeff = GetCoeffPtr(poly, degree);
+
+        diff_poly->polynomial_type->DerivativeOperationInCoef(tmp_coeff, &degree);
+
+        SetCoeff(diff_poly, degree - 1, tmp_coeff);
+    }
+
+    free(tmp_coeff);
+
+} 

@@ -4,6 +4,7 @@
 #include "polynomial.h"
 #include "field_info.h"
 #include "tools.h"
+#include "tests.h"
 
 
 
@@ -40,7 +41,8 @@ void menu()
         printf("5.  Add 2 polynomials\n");
         printf("6.  Multiply polynomial by a scalar\n");
         printf("7.  Multiply 2 polynomials\n");
-        printf("8.  Run tests\n");
+        printf("8. Derivative a polynomian\n");
+        printf("9.  Run tests\n");
         printf("0.  Exit\n");
         printf("Choice: ");
 
@@ -71,9 +73,9 @@ void menu()
             int coeff_type;
             int degree;
 
-            printf("Write degree of polynomial (it must be int):    ");
+            printf("Write degree of polynomial (it must be positive int):    ");
 
-            if (!read_num(&degree, INT_TYPE))
+            if (!read_num(&degree, INT_TYPE) || degree < 0)
             {
                 printf("ERROR! Invalid degree\n");
                 continue;
@@ -616,6 +618,54 @@ void menu()
             break;
 
         }
+
+        case 8: // Derivative polynomial
+        {
+
+            if (poly_id == 0)
+            {
+                printf("ERROR! Not a polynomial has been created\n");
+                continue;
+            }
+
+            printf("There are %d polynomials now\n", poly_id);
+            PrintListOfPolynomials(polys, poly_id);
+            printf("Which polynomials do you want to select?\nChoice:  ");
+            int poly_number;
+            
+            if (!read_num(&poly_number, INT_TYPE))
+            {
+                printf("ERROR! Invalid input\n");
+                continue;
+            }
+            printf("\n");
+
+            if (poly_number > poly_id || poly_number <= 0)
+            {
+                printf("ERROR! Wrong number\n");
+                continue;
+            }
+
+            Polynomial* poly = polys[poly_number - 1];
+
+            if (poly->count < 1)
+            {
+
+            }
+
+            Polynomial* diff_poly = CreatePolynomial(poly->polynomial_type, poly->count - 2);
+
+            printf("SUKA\n");
+
+            DerivativeOfPolynomial(poly, diff_poly);
+
+            printf("Succesfull took the derivative of the polynomial:  ");
+            PrintPolynomial(diff_poly);
+            printf("\n");
+
+            break;
+        }
+
 
         default:
             printf("\nERROR! Invalid command.\n");

@@ -44,6 +44,24 @@ static void complex_print(void* element) {
     printf("(%.2f %c %.2fi)", el->re, (el->im >= 0 ? '+': '-'), fabs(el->im));
 }
 
+static void DerivativeOperationInCoef_Complex(void* co, int* degree)
+{
+
+    Complex* coeff = (Complex*)co;
+    coeff->re *= *degree;
+    coeff->im *= *degree;
+
+}
+
+void DerivativeOperationInCoef_Int(void* co, int* degree)
+{
+
+    int* coeff = (int*)co;
+    *coeff *= *degree;
+
+}
+
+
 FieldInfo* GetIntFieldInfo() {
 
     if (INT_FIELD_INFO == NULL) {
@@ -52,6 +70,7 @@ FieldInfo* GetIntFieldInfo() {
         INT_FIELD_INFO->add = int_add;
         INT_FIELD_INFO->mult = int_mul;
         INT_FIELD_INFO->print = int_print;
+        INT_FIELD_INFO->DerivativeOperationInCoef = DerivativeOperationInCoef_Int; 
         INT_FIELD_INFO->size = sizeof(int);
     }
 
@@ -66,8 +85,10 @@ FieldInfo* GetComplexFieldInfo() {
         COMPLEX_FIELD_INFO->add = complex_add;
         COMPLEX_FIELD_INFO->mult = complex_mult;
         COMPLEX_FIELD_INFO->print = complex_print;
+        COMPLEX_FIELD_INFO->DerivativeOperationInCoef = DerivativeOperationInCoef_Complex;
         COMPLEX_FIELD_INFO->size = sizeof(Complex);
     }
 
     return COMPLEX_FIELD_INFO;
 }
+
