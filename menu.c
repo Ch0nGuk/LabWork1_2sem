@@ -41,7 +41,7 @@ void menu()
         printf("5.  Add 2 polynomials\n");
         printf("6.  Multiply polynomial by a scalar\n");
         printf("7.  Multiply 2 polynomials\n");
-        printf("8. Derivative a polynomian\n");
+        printf("8.  Derivative a polynomial\n");
         printf("9.  Run tests\n");
         printf("0.  Exit\n");
         printf("Choice: ");
@@ -648,16 +648,9 @@ void menu()
 
             Polynomial* poly = polys[poly_number - 1];
 
-            if (poly->count < 1)
-            {
+            Polynomial* diff_poly = DerivativeOfPolynomial(poly);
 
-            }
-
-            Polynomial* diff_poly = CreatePolynomial(poly->polynomial_type, poly->count - 2);
-
-            printf("SUKA\n");
-
-            DerivativeOfPolynomial(poly, diff_poly);
+            polys[poly_id++] = diff_poly;
 
             printf("Succesfull took the derivative of the polynomial:  ");
             PrintPolynomial(diff_poly);
@@ -666,6 +659,17 @@ void menu()
             break;
         }
 
+
+        case 9:
+        {
+
+            test_complex();
+            test_int();
+
+            break;
+
+        }
+        
 
         default:
             printf("\nERROR! Invalid command.\n");

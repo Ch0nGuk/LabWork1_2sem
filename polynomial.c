@@ -181,26 +181,77 @@ void PolynomialMult(Polynomial* poly1, Polynomial* poly2, Polynomial* result_pol
 }
 
 
-void DerivativeOfPolynomial(Polynomial* poly, Polynomial* diff_poly)
+// void* DerivativeOfPolynomial(Polynomial* poly, Polynomial* diff_poly)
+// {
+//     if (poly == NULL || diff_poly == NULL) return;
+
+//     if (poly->polynomial_type != diff_poly->polynomial_type) return;
+
+
+//     if (poly->count == 1 && diff_poly->count == 1)
+//     {
+//         void* diff_coeff = malloc(sizeof(poly->polynomial_type->size));
+//         void* tmp_coeff = GetCoeffPtr(poly, 0);
+//         diff_poly->polynomial_type->DerivativeOperationInCoef(tmp_coeff, 0, diff_coeff);
+//         SetCoeff(diff_poly, 0, diff_coeff);
+//         free(diff_coeff);
+//         return;
+
+//     }
+
+//     if ((int)diff_poly->count < (int)poly->count - 1) return;
+
+//     void* diff_coeff = malloc(sizeof(poly->polynomial_type->size));
+
+//     for (int degree = poly->count - 1; degree > 0; degree--)
+//     {
+//         void* tmp_coeff = GetCoeffPtr(poly, degree);
+
+//         diff_poly->polynomial_type->DerivativeOperationInCoef(tmp_coeff, degree, diff_coeff);
+
+//         SetCoeff(diff_poly, degree - 1, diff_coeff);
+//     }
+
+//     free(diff_coeff);
+
+// } 
+
+
+Polynomial* DerivativeOfPolynomial(Polynomial* poly)
 {
-    if (poly == NULL || diff_poly == NULL) return;
+    if (poly == NULL) return NULL;
+    
+    if (poly->count == 1)
+    {
+        Polynomial* diff_poly = CreatePolynomial(poly->polynomial_type, 0);
+        void* src = malloc(sizeof(poly->polynomial_type->size));
 
-    if (poly->polynomial_type != diff_poly->polynomial_type) return;
+        if (src == NULL) return NULL;
 
-    if ((int)diff_poly->count < (int)poly->count - 1 || (int)poly->count == 1) return;
+        void* coeff = GetCoeffPtr(poly, 0);
+        poly->polynomial_type->DerivativeOperationInCoef(coeff, 0, src);
+        SetCoeff(diff_poly, 0, src);
 
-    void* tmp_coeff = malloc(sizeof(poly->polynomial_type->size));
-    if (!tmp_coeff) return;
+        free(src);
+
+        return diff_poly;
+    }
+
+    Polynomial* diff_poly = CreatePolynomial(poly->polynomial_type, poly->count - 2);
+
+    void* diff_coeff = malloc(sizeof(poly->polynomial_type->size));
 
     for (int degree = poly->count - 1; degree > 0; degree--)
     {
-        tmp_coeff = GetCoeffPtr(poly, degree);
+        void* tmp_coeff = GetCoeffPtr(poly, degree);
 
-        diff_poly->polynomial_type->DerivativeOperationInCoef(tmp_coeff, &degree);
+        diff_poly->polynomial_type->DerivativeOperationInCoef(tmp_coeff, degree, diff_coeff);
 
-        SetCoeff(diff_poly, degree - 1, tmp_coeff);
+        SetCoeff(diff_poly, degree - 1, diff_coeff);
     }
 
-    free(tmp_coeff);
+    free(diff_coeff);
 
-} 
+    return diff_poly;
+
+}

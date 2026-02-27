@@ -8,7 +8,7 @@ typedef struct FieldInfo {
 
     void (*add)(void* a, void* b, void* res);
     void (*mult)(void* a, void* b, void* res);
-    void (*DerivativeOperationInCoef)(void* co, int* degree);
+    void (*DerivativeOperationInCoef)(void* co, int degree, void* result);
 
     void (*print)(void* element);
 } FieldInfo;
@@ -24,4 +24,4 @@ FieldInfo* GetComplexFieldInfo();
 
 
 
-#endif
+#endif 

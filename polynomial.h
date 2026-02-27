@@ -25,7 +25,7 @@ void ScalarMult(Polynomial* poly, void* scalar);
 
 void PolynomialMult(Polynomial* poly1, Polynomial* poly2, Polynomial* result_poly);
 
-void DerivativeOfPolynomial(Polynomial* poly, Polynomial* diff_poly);
+Polynomial* DerivativeOfPolynomial(Polynomial* poly);
 
 
 #endif // POLYNOMIAL_H

@@ -44,20 +44,23 @@ static void complex_print(void* element) {
     printf("(%.2f %c %.2fi)", el->re, (el->im >= 0 ? '+': '-'), fabs(el->im));
 }
 
-static void DerivativeOperationInCoef_Complex(void* co, int* degree)
+static void DerivativeOperationInCoef_Complex(void* co, int degree, void* result)
 {
 
     Complex* coeff = (Complex*)co;
-    coeff->re *= *degree;
-    coeff->im *= *degree;
+    Complex* res = (Complex*)result;
+    res->re = coeff->re * degree;
+    res->im = coeff->im * degree;
 
 }
 
-void DerivativeOperationInCoef_Int(void* co, int* degree)
+void DerivativeOperationInCoef_Int(void* co, int degree, void* result)
 {
 
     int* coeff = (int*)co;
-    *coeff *= *degree;
+    int* res = (int*)result;
+
+    *res = *coeff * degree;
 
 }
 
