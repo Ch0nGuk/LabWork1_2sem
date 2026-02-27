@@ -11,10 +11,10 @@ field_info.o: field_info.c field_info.h
 	gcc -c field_info.c
 	
 polynomial.o: polynomial.c polynomial.h field_info.h
-	gcc -c polynomial.o
+	gcc -c polynomial.c
 	
 tests.o: tests.c tests.h field_info.h polynomial.h tests.h tools.h
-	gcc -c tests.o
+	gcc -c tests.c
 
 clean:
 	rm *.o program
