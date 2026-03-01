@@ -2,10 +2,70 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <string.h>
+#include <ctype.h>
 #include "field_info.h"
 
 static FieldInfo* INT_FIELD_INFO = NULL;
 static FieldInfo* COMPLEX_FIELD_INFO = NULL;
+
+static char* strip_str(char* str)
+// Функция, которая "раздевает" строку, то есть убирает у нее все пробелы, табы в начале и конце
+{
+    char* end;
+
+    while ( isspace((unsigned char)*str) ) str++; // прибавлякем начало строки, пока не пройдем все пробелы, табы и тп
+
+    if (*str == 0) return str; //строка состоит только из пробелов
+
+    end = str + strlen(str) - 1; // ставим указатель end на конец и вычитаем один, чтобы избавиться от \0
+
+    while ( end > str && isspace((unsigned char)*end) ) end--; 
+    end[1] = '\0'; // ставим терминатор строки
+
+    return str;
+
+}
+
+
+int read_num(void* str, NumType type) // ОБЩАЯ ФУНКЦИЯ, которая считывает значение из буфера и сравнивает с типом данных. 
+// Возвращает 1 если введенное число и тип данных совпадают, 0 в обратном случае
+{
+    char buffer[256]; // буффер
+    char* endstr; // указатель куда будет писаться первые несчитанные элементы после strtol && strtod
+    char* clean_str; // начало чистой строки
+
+    if (fgets(buffer, sizeof(buffer), stdin) == NULL) return 0;
+
+    clean_str = strip_str(buffer);
+    
+    if (strlen(clean_str) == 0) return 0;
+
+    if (type == INT_TYPE)
+    {
+
+        int value = strtol(clean_str, &endstr, 10); // передаем строку, адрес указателя в который запишется адрес конца строки, основание системы счисления
+        if (*endstr != '\0') return 0; // значит после числа есть какой-то мусор (буквы, точки и тп) => ввод не корректен
+        *(int*)str = value;
+
+        return 1;
+
+    }
+
+    if (type == DOUBLE_TYPE)
+    {
+
+        double value = strtod(clean_str, &endstr);
+        if (*endstr != '\0') return 0;
+        *(double*)str = value;
+
+        return 1;
+
+    }
+
+    return 0;
+
+}
 
 static void int_add(void* element1, void* element2, void* result) {
     *(int*)result = *(int*)element1 + *(int*)element2;
@@ -44,6 +104,18 @@ static void complex_print(void* element) {
     printf("(%.2f %c %.2fi)", el->re, (el->im >= 0 ? '+': '-'), fabs(el->im));
 }
 
+static int int_read(void* str)
+{
+    int* ptr = (int*)str;
+    return read_num(ptr, INT_TYPE);
+}
+
+static int complex_read(void* str)
+{
+    Complex* ptr = (Complex*)str;
+    return (read_num(&(ptr->re), DOUBLE_TYPE) && read_num(&(ptr->im), DOUBLE_TYPE));
+}
+
 static void DerivativeOperationInCoef_Complex(void* co, int degree, void* result)
 {
 
@@ -54,7 +126,7 @@ static void DerivativeOperationInCoef_Complex(void* co, int degree, void* result
 
 }
 
-void DerivativeOperationInCoef_Int(void* co, int degree, void* result)
+static void DerivativeOperationInCoef_Int(void* co, int degree, void* result)
 {
 
     int* coeff = (int*)co;
@@ -73,6 +145,7 @@ FieldInfo* GetIntFieldInfo() {
         INT_FIELD_INFO->add = int_add;
         INT_FIELD_INFO->mult = int_mul;
         INT_FIELD_INFO->print = int_print;
+        INT_FIELD_INFO->read = int_read;
         INT_FIELD_INFO->DerivativeOperationInCoef = DerivativeOperationInCoef_Int; 
         INT_FIELD_INFO->size = sizeof(int);
     }
@@ -88,6 +161,7 @@ FieldInfo* GetComplexFieldInfo() {
         COMPLEX_FIELD_INFO->add = complex_add;
         COMPLEX_FIELD_INFO->mult = complex_mult;
         COMPLEX_FIELD_INFO->print = complex_print;
+        COMPLEX_FIELD_INFO->read = complex_read;
         COMPLEX_FIELD_INFO->DerivativeOperationInCoef = DerivativeOperationInCoef_Complex;
         COMPLEX_FIELD_INFO->size = sizeof(Complex);
     }

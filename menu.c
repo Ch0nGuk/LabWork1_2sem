@@ -47,7 +47,7 @@ void menu()
 
         int menu_choice;
 
-        if ( !read_num(&menu_choice, INT_TYPE) ) 
+        if ( !IntField->read(&menu_choice) ) 
         {
             printf("\nERROR! Invalid command.\n");
             continue;
@@ -74,7 +74,7 @@ void menu()
 
             printf("Write degree of polynomial (it must be positive int):    ");
 
-            if (!read_num(&degree, INT_TYPE) || degree < 0)
+            if (!IntField->read(&degree) || degree < 0)
             {
                 printf("ERROR! Invalid degree\n");
                 continue;
@@ -83,7 +83,7 @@ void menu()
 
             printf("1.  With integer coefficients\n2.  With complex coefficients\nChoice:  ");
 
-            if (!read_num(&coeff_type, INT_TYPE))
+            if (!IntField->read(&coeff_type))
             {
                 printf("ERROR! Invalid input\n");
                 continue;
@@ -100,7 +100,7 @@ void menu()
                     int coeff;
                     printf("Write %dth coefficient:  ", index);
 
-                    if (!read_num(&coeff, INT_TYPE))
+                    if (!IntField->read(&coeff))
                     {
                         printf("ERROR! Invalid input. Try again!\n");
                         index++;
@@ -124,26 +124,15 @@ void menu()
 
                 for (int index = degree; index >= 0; index--)
                 {
-                    double re, im;
-                    printf("Write real part of %dth index:  ", index);
+                    Complex coeff;
+                    printf("Write %dth index (real and image part in different string):  ", index);
 
-                    if (!read_num(&re, DOUBLE_TYPE))
+                    if (!ComplexField->read(&coeff))
                     {
                         printf("ERROR! Invalid input. Try again!\n");
                         index++;
                         continue;
                     }
-
-                    printf("Write image part of %dth index:  ", index);
-
-                    if (!read_num(&im, DOUBLE_TYPE))
-                    {
-                        printf("ERROR! Invalid input. Try again!\n");
-                        index++;
-                        continue;
-                    }
-
-                    Complex coeff = {re, im};
 
                     SetCoeff(polys[poly_id - 1], index, &coeff);
 
@@ -181,7 +170,7 @@ void menu()
 
             int poly_number;
             
-            if (!read_num(&poly_number, INT_TYPE))
+            if (!IntField->read(&poly_number))
             {
                 printf("ERROR! Invalid input\n");
                 continue;
@@ -199,14 +188,14 @@ void menu()
 
             printf("There are %d coefficients of the polynomial\nWhich coefficient (0 - %d) do you want to select?\nChoice:  ", (int)poly->degree + 1, (int)poly->degree);
 
-            if (!read_num(&coeff_number, INT_TYPE))
+            if (!IntField->read(&coeff_number))
             {
                 printf("ERROR! Invalid input\n");
                 continue;
             }
             printf("\n");
 
-            if (coeff_number > (int)poly->degree || coeff_number <= 0)
+            if (coeff_number > (int)poly->degree || coeff_number < 0)
             {
                 printf("ERROR! Wrong coefficient\n");
                 continue;
@@ -217,7 +206,7 @@ void menu()
                 printf("Polynomial's type is integer\nWrite coefficient value:  ");
                 int data;
 
-                if (!read_num(&data, INT_TYPE)) 
+                if (!IntField->read(&data)) 
                 {
                     printf("ERROR! Wrong input\n");
                     continue;
@@ -230,26 +219,15 @@ void menu()
 
             if (poly->polynomial_type == ComplexField)
             {
-                double re, im;
-                printf("Polynomial's type is complex\nWrite real coefficient value:  ");
+                Complex data;
+                printf("Polynomial's type is complex\nWrite coefficient value (real and image part in different string):  ");
 
-                if (!read_num(&re, DOUBLE_TYPE)) 
+                if(!ComplexField->read(&data))
                 {
                     printf("ERROR! Invalid input\n");
                     continue;
                 }
                 printf("\n");
-
-                printf("Write image coefficient value:  ");
-
-                if(!read_num(&im, DOUBLE_TYPE))
-                {
-                    printf("ERROR! Invalid input\n");
-                    continue;
-                }
-                printf("\n");
-
-                Complex data = {re, im};
 
                 SetCoeff(poly, coeff_number, &data);
 
@@ -274,7 +252,7 @@ void menu()
 
             int poly_number;
             
-            if (!read_num(&poly_number, INT_TYPE))
+            if (!IntField->read(&poly_number))
             {
                 printf("ERROR! Invalid input\n");
                 continue;
@@ -309,7 +287,7 @@ void menu()
             printf("Which polynomials do you want to select?\nChoice:  ");
             int poly_number;
             
-            if (!read_num(&poly_number, INT_TYPE))
+            if (!IntField->read(&poly_number))
             {
                 printf("ERROR! Invalid input\n");
                 continue;
@@ -329,7 +307,7 @@ void menu()
                 printf("This polynomial has integer type\nWrite integer dot, where find value:  ");
                 int dot;
 
-                if (!read_num(&dot, INT_TYPE))
+                if (!IntField->read(&dot))
                 {
                     printf("ERROR! Wrong input\n");
                     continue;
@@ -345,24 +323,15 @@ void menu()
 
             if (poly->polynomial_type == ComplexField)
             {
-                double re, im;
+                Complex dot;
+                printf("Polynomial's type is complex\nWrite coefficient value (real and image part in different string):  ");
 
-                printf("This polynomial has complex type\nWrite real part of dot, where find value:  ");
-                if(!read_num(&re, DOUBLE_TYPE))
+                if(!ComplexField->read(&dot))
                 {
                     printf("ERROR! Invalid input\n");
                     continue;
                 }
-
                 printf("\n");
-                printf("Write image part of dot, where find value:  ");
-                if(!read_num(&im, DOUBLE_TYPE))
-                {
-                    printf("ERROR! Invalid input\n");
-                    continue;
-                }
-
-                Complex dot = {re, im};
 
                 Complex* result = malloc(sizeof(Complex));
 
@@ -395,7 +364,7 @@ void menu()
             PrintListOfPolynomials(polys, poly_id);
             printf("Write first polynomial:   ");
 
-            if (!read_num(&first_num, INT_TYPE))
+            if (!IntField->read(&first_num))
             {
                 printf("ERROR! Invalid input\n");
                 continue;
@@ -410,7 +379,7 @@ void menu()
             printf("\n");
             printf("Write second polynomial:   ");
 
-            if (!read_num(&second_num, INT_TYPE))
+            if (!IntField->read(&second_num))
             {
                 printf("ERROR! Invalid input\n");
                 continue;
@@ -472,7 +441,7 @@ void menu()
 
             int poly_number;
             
-            if (!read_num(&poly_number, INT_TYPE))
+            if (!IntField->read(&poly_number))
             {
                 printf("ERROR! Invalid input\n");
                 continue;
@@ -492,7 +461,7 @@ void menu()
                 printf("This polynomial has integer type\nWrite integer scalar:  ");
                 int dot;
 
-                if (!read_num(&dot, INT_TYPE))
+                if (!IntField->read(&dot))
                 {
                     printf("ERROR! Wrong input\n");
                     continue;
@@ -510,24 +479,15 @@ void menu()
 
             if (poly->polynomial_type == ComplexField)
             {
-                double re, im;
+                Complex dot;
+                printf("Polynomial's type is complex\nWrite complex scalar (real and image part in different string):  ");
 
-                printf("This polynomial has complex type\nWrite real part of scalar:  ");
-                if(!read_num(&re, DOUBLE_TYPE))
+                if(!ComplexField->read(&dot))
                 {
                     printf("ERROR! Invalid input\n");
                     continue;
                 }
-
                 printf("\n");
-                printf("Write image part of scalar:  ");
-                if(!read_num(&im, DOUBLE_TYPE))
-                {
-                    printf("ERROR! Invalid input\n");
-                    continue;
-                }
-
-                Complex dot = {re, im};
 
                 ScalarMult(poly, &dot);
 
@@ -555,7 +515,7 @@ void menu()
             PrintListOfPolynomials(polys, poly_id);
             printf("Write first polynomial:   ");
 
-            if (!read_num(&first_num, INT_TYPE))
+            if (!IntField->read(&first_num))
             {
                 printf("ERROR! Invalid input\n");
                 continue;
@@ -570,7 +530,7 @@ void menu()
             printf("\n");
             printf("Write second polynomial:   ");
 
-            if (!read_num(&second_num, INT_TYPE))
+            if (!IntField->read(&second_num))
             {
                 printf("ERROR! Invalid input\n");
                 continue;
@@ -632,7 +592,7 @@ void menu()
             printf("Which polynomials do you want to select?\nChoice:  ");
             int poly_number;
             
-            if (!read_num(&poly_number, INT_TYPE))
+            if (!IntField->read(&poly_number))
             {
                 printf("ERROR! Invalid input\n");
                 continue;
@@ -644,11 +604,11 @@ void menu()
                 printf("ERROR! Wrong number\n");
                 continue;
             }
-
+            printf("\nGOOD CODE BITCH\n");
             Polynomial* poly = polys[poly_number - 1];
-
+            printf("\nGOOD CODE STUPID BITCH\n");
             Polynomial* diff_poly = DerivativeOfPolynomial(poly);
-
+            printf("\nYOU'r SUCKING CODER\n");
             polys[poly_id++] = diff_poly;
 
             printf("Succesfull took the derivative of the polynomial:  ");

@@ -3,6 +3,16 @@
 
 #include <stddef.h>
 
+typedef enum 
+{
+    INT_TYPE,
+    DOUBLE_TYPE
+} NumType;
+
+static char* strip_str(char* str);
+int read_num(void* str, NumType type);
+
+
 typedef struct FieldInfo {
     size_t size;
 
@@ -11,7 +21,7 @@ typedef struct FieldInfo {
     void (*DerivativeOperationInCoef)(void* co, int degree, void* result);
 
     void (*print)(void* element);
-    // void (*read)(void *element)???
+    int (*read)(void *element);
 } FieldInfo;
 
 typedef struct Complex {
