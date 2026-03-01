@@ -2,5 +2,5 @@
 mingw32-make
 
 ## Linux: 
-make
+make\
 ./program
