@@ -15,16 +15,16 @@ Polynomial* CreatePolynomial(FieldInfo* FInfo, int degree) {
     }
 
     poly->polynomial_type = FInfo;
-    poly->count = (size_t)(degree + 1);
+    poly->degree = degree;
 
-    poly->coefficients = (void*)malloc(FInfo->size * poly->count);
+    poly->coefficients = (void*)malloc(FInfo->size * poly->degree + 1);
 
     if (poly->coefficients == NULL) {
         free(poly);
         return NULL;
     }
 
-    memset(poly->coefficients, 0, FInfo->size * poly->count);
+    memset(poly->coefficients, 0, FInfo->size * poly->degree + 1);
 
     return poly;
 
@@ -46,7 +46,7 @@ void FreePolynomial(Polynomial* poly) {
 
 static void* GetCoeffPtr(Polynomial* poly, int index) {
 
-    if (poly == NULL || index < 0 || index >= (int)poly->count) {
+    if (poly == NULL || index < 0 || index >= (int)poly->degree + 1) {
         return NULL;
     }
 
@@ -70,7 +70,7 @@ void PrintPolynomial(Polynomial* poly) {
         return;
     }
 
-    for (int degree = (int)poly->count - 1; degree >= 0; degree--) {
+    for (int degree = (int)poly->degree; degree >= 0; degree--) {
         void* coeff_adress = GetCoeffPtr(poly, degree);
         poly->polynomial_type->print(coeff_adress);
 
@@ -89,10 +89,10 @@ void EvaluatePolynomial(Polynomial* poly, void* dot, void* result) {
         return;
     }
 
-    void* senior_coeff = GetCoeffPtr(poly, poly->count - 1);
+    void* senior_coeff = GetCoeffPtr(poly, poly->degree);
     memcpy(result, senior_coeff, poly->polynomial_type->size);
 
-    for (int degree = (int)poly->count - 2; degree >= 0; degree--) {
+    for (int degree = (int)poly->degree - 1; degree >= 0; degree--) {
         poly->polynomial_type->mult(result, dot, result);
         void* current_coeff = GetCoeffPtr(poly, degree);
         poly->polynomial_type->add(result, current_coeff, result);
@@ -110,7 +110,7 @@ void AddPolynomial(Polynomial* poly1, Polynomial* poly2, Polynomial* result_poly
         return;
     }
 
-    int result_degree = poly1->count >= poly2->count ? (int)poly1->count - 1 : (int)poly2->count - 1;
+    int result_degree = poly1->degree >= poly2->degree ? (int)poly1->degree : (int)poly2->degree;
 
     for (int degree = result_degree; degree >= 0; degree--) {
         void* coef1 = GetCoeffPtr(poly1, degree);
@@ -137,7 +137,7 @@ void ScalarMult(Polynomial* poly, void* scalar) {
         return;
     }
 
-    for (int degree = (int)poly->count - 1; degree >= 0; degree--) {
+    for (int degree = (int)poly->degree; degree >= 0; degree--) {
         void* coef = GetCoeffPtr(poly, degree);
         poly->polynomial_type->mult(coef, scalar, coef);
     }
@@ -152,7 +152,7 @@ void PolynomialMult(Polynomial* poly1, Polynomial* poly2, Polynomial* result_pol
         return;
     }
 
-    if (result_poly->count + 1 < poly1->count + poly2->count) {
+    if (result_poly->degree + 1 < poly1->degree + poly2->degree) {
         return;
     }
 
@@ -162,10 +162,10 @@ void PolynomialMult(Polynomial* poly1, Polynomial* poly2, Polynomial* result_pol
         return;
     }
 
-    memset(result_poly->coefficients, 0, result_poly->polynomial_type->size * result_poly->count);
+    memset(result_poly->coefficients, 0, result_poly->polynomial_type->size * (result_poly->degree + 1));
 
-    for (int degree1 = (int)poly1->count - 1; degree1 >= 0; degree1--) {
-        for (int degree2 = (int)poly2->count - 1; degree2 >= 0; degree2--) {   
+    for (int degree1 = (int)poly1->degree; degree1 >= 0; degree1--) {
+        for (int degree2 = (int)poly2->degree; degree2 >= 0; degree2--) {   
             int result_degree = degree1 + degree2;
             void* coef1 = GetCoeffPtr(poly1, degree1);
             void* coef2 = GetCoeffPtr(poly2, degree2);
@@ -221,7 +221,7 @@ Polynomial* DerivativeOfPolynomial(Polynomial* poly)
 {
     if (poly == NULL) return NULL;
     
-    if (poly->count == 1)
+    if (poly->degree == 0)
     {
         Polynomial* diff_poly = CreatePolynomial(poly->polynomial_type, 0);
         void* src = malloc(sizeof(poly->polynomial_type->size));
@@ -237,11 +237,11 @@ Polynomial* DerivativeOfPolynomial(Polynomial* poly)
         return diff_poly;
     }
 
-    Polynomial* diff_poly = CreatePolynomial(poly->polynomial_type, poly->count - 2);
+    Polynomial* diff_poly = CreatePolynomial(poly->polynomial_type, poly->degree - 1);
 
     void* diff_coeff = malloc(sizeof(poly->polynomial_type->size));
 
-    for (int degree = poly->count - 1; degree > 0; degree--)
+    for (int degree = poly->degree; degree > 0; degree--)
     {
         void* tmp_coeff = GetCoeffPtr(poly, degree);
 

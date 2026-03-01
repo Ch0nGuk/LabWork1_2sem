@@ -7,7 +7,6 @@
 #include "tests.h"
 
 
-
 void menu()
 {   
     FieldInfo* IntField = GetIntFieldInfo();
@@ -16,7 +15,7 @@ void menu()
     Polynomial* polys[10];
     int poly_id = 0;
 
-    printf("\n========README========\n\n");
+    printf("\n========READ IT========\n\n");
     printf("Polynomial has the form: An*X^n + A(n-1)*X^(n-1) + ... + A1*X + A0\n");
     printf("The degree of polynomial is the number  N\n");
     printf("The count of term (Ai*X^i) is  (N + 1)\n\n");
@@ -198,7 +197,7 @@ void menu()
             Polynomial* poly = polys[poly_number - 1];
             int coeff_number;
 
-            printf("There are %d coefficients of the polynomial\nWhich coefficient (0 - %d) do you want to select?\nChoice:  ", (int)poly->count, (int)poly->count - 1);
+            printf("There are %d coefficients of the polynomial\nWhich coefficient (0 - %d) do you want to select?\nChoice:  ", (int)poly->degree + 1, (int)poly->degree);
 
             if (!read_num(&coeff_number, INT_TYPE))
             {
@@ -207,7 +206,7 @@ void menu()
             }
             printf("\n");
 
-            if (coeff_number > (int)poly->count - 1 || coeff_number <= 0)
+            if (coeff_number > (int)poly->degree || coeff_number <= 0)
             {
                 printf("ERROR! Wrong coefficient\n");
                 continue;
@@ -434,7 +433,7 @@ void menu()
             Polynomial* poly1 = polys[first_num - 1];
             Polynomial* poly2 = polys[second_num - 1];
 
-            Polynomial* add_pol = CreatePolynomial(poly1->polynomial_type, poly1->count >= poly2->count ? (int)poly1->count - 1 : (int)poly2->count - 1);
+            Polynomial* add_pol = CreatePolynomial(poly1->polynomial_type, poly1->degree >= poly2->degree ? (int)poly1->degree : (int)poly2->degree);
 
             AddPolynomial(poly1, poly2, add_pol);
 
@@ -594,7 +593,7 @@ void menu()
             Polynomial* poly1 = polys[first_num - 1];
             Polynomial* poly2 = polys[second_num - 1];
 
-            Polynomial* mult_pol = CreatePolynomial(poly1->polynomial_type, poly1->count >= poly2->count ? (int)poly1->count - 1 : (int)poly2->count - 1);
+            Polynomial* mult_pol = CreatePolynomial(poly1->polynomial_type, poly1->degree >= poly2->degree ? (int)poly1->degree : (int)poly2->degree);
 
             PolynomialMult(poly1, poly2, mult_pol);
 
@@ -675,10 +674,11 @@ void menu()
             printf("\nERROR! Invalid command.\n");
             continue;
             break;
-        }
+
+        } // switch
 
 
 
-    }
+    } // WHile(1)
 
-}
+} // void_menu()

@@ -6,7 +6,7 @@
 typedef struct Polynomial {
     FieldInfo* polynomial_type;
     void* coefficients;
-    size_t count;
+    int degree;
 } Polynomial;
 
 Polynomial* CreatePolynomial(FieldInfo* FInfo, int degree);

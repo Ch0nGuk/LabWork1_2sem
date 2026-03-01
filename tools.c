@@ -6,7 +6,6 @@
 #include "tools.h"
 
 
-
 static char* strip_str(char* str)
 {
     char* end;

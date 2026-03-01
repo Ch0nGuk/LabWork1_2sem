@@ -66,7 +66,7 @@ void test_int() {
     printf("Derivative: ("); PrintPolynomial(p1);
     printf(")' == "); PrintPolynomial(p_der); printf("\n");
     
-    assert(p_der->count == 1);
+    assert(p_der->degree == 0);
     assert(*(int*)GET_COEFF(p_der, 0) == 2);
 
     FreePolynomial(p1);

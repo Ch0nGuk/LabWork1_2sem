@@ -11,6 +11,7 @@ typedef struct FieldInfo {
     void (*DerivativeOperationInCoef)(void* co, int degree, void* result);
 
     void (*print)(void* element);
+    // void (*read)(void *element)???
 } FieldInfo;
 
 typedef struct Complex {
