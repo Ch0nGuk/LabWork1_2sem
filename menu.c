@@ -604,11 +604,11 @@ void menu()
                 printf("ERROR! Wrong number\n");
                 continue;
             }
-            printf("\nGOOD CODE BITCH\n");
+            
             Polynomial* poly = polys[poly_number - 1];
-            printf("\nGOOD CODE STUPID BITCH\n");
+
             Polynomial* diff_poly = DerivativeOfPolynomial(poly);
-            printf("\nYOU'r SUCKING CODER\n");
+
             polys[poly_id++] = diff_poly;
 
             printf("Succesfull took the derivative of the polynomial:  ");
