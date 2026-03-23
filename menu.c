@@ -3,14 +3,20 @@
 #include <string.h>
 #include "polynomial.h"
 #include "field_info.h"
-#include "tools.h"
+#include "print_list_polynomials.h"
 #include "tests.h"
-
+#include "create_polynomial.h"
+#include "set_coef.h"
+#include "evaluate_polynomial.h"
+#include "add_polynomials.h"
+#include "mult_by_scalar.h"
+#include "mult_polys.h"
+#include "derivative.h"
 
 void menu()
 {   
-    FieldInfo* IntField = GetIntFieldInfo();
-    FieldInfo* ComplexField = GetComplexFieldInfo();
+    FieldInfo* int_field = get_int_field_info();
+    FieldInfo* complex_field = get_complex_field_info();
 
     Polynomial* polys[10];
     int poly_id = 0;
@@ -26,619 +32,92 @@ void menu()
     printf("            |\n");
     printf("           1th coef \n\n");
 
-
-
     while (1)
     {
-        
         printf("\n\n-------- MENU of Polynomial --------\n\n");
         printf("Select the command:\n\n");
         printf("1.  Create polynomial\n");
         printf("2.  Set coefficient\n");
         printf("3.  Print polynomial\n");
-        printf("4.  Find the value at the point\n");
-        printf("5.  Add 2 polynomials\n");
-        printf("6.  Multiply polynomial by a scalar\n");
-        printf("7.  Multiply 2 polynomials\n");
-        printf("8.  Derivative a polynomial\n");
+        printf("4.  Find the value of the polynomial at a point\n");
+        printf("5.  Add polynomials\n");
+        printf("6.  Multiply polynomial by scalar\n");
+        printf("7.  Multiply polynomials\n");
+        printf("8.  Derivative polynomial\n");
         printf("9.  Run tests\n");
         printf("0.  Exit\n");
-        printf("Choice: ");
+        printf("\nChoice:  ");
 
         int menu_choice;
-
-        if ( !IntField->read(&menu_choice) ) 
+        if (!int_field->read(&menu_choice))
         {
-            printf("\nERROR! Invalid command.\n");
+            printf("\nERROR! Invalid input\n");
             continue;
         }
-        printf("\n");
+
+        if (menu_choice == 0) break;
 
         switch (menu_choice)
         {
-
-        case 0:
-
-            for (int poly = 0; poly < poly_id; poly++)
-            {
-                FreePolynomial(polys[poly]);
-            }
-
-            return;
-
         case 1: // Create polynomial
         {
-
-            int coeff_type;
-            int degree;
-
-            printf("Write degree of polynomial (it must be positive int):    ");
-
-            if (!IntField->read(&degree) || degree < 0)
-            {
-                printf("ERROR! Invalid degree\n");
-                continue;
-            }
-            printf("\n");
-
-            printf("1.  With integer coefficients\n2.  With complex coefficients\nChoice:  ");
-
-            if (!IntField->read(&coeff_type))
-            {
-                printf("ERROR! Invalid input\n");
-                continue;
-            }
-            printf("\n");
-
-            switch (coeff_type) 
-            {
-            case 1: // Int polynomial
-                polys[poly_id++] = CreatePolynomial(IntField, degree);
-
-                for (int index = degree; index >= 0; index--)
-                {   
-                    int coeff;
-                    printf("Write %dth coefficient:  ", index);
-
-                    if (!IntField->read(&coeff))
-                    {
-                        printf("ERROR! Invalid input. Try again!\n");
-                        index++;
-                        continue;
-                    }
-
-                    SetCoeff(polys[poly_id - 1], index, &coeff);
-
-                    printf("\n");
-                }
-
-                printf("Succesfull create integer polynomial!\n");
-                printf("New polynomials:\n");
-
-                PrintPolynomial(polys[poly_id - 1]);
-                printf("\n");
-                break;
-            
-            case 2: // Complex polynomial
-                polys[poly_id++] = CreatePolynomial(ComplexField, degree);
-
-                for (int index = degree; index >= 0; index--)
-                {
-                    Complex coeff;
-                    printf("Write %dth index (real and image part in different string):  ", index);
-
-                    if (!ComplexField->read(&coeff))
-                    {
-                        printf("ERROR! Invalid input. Try again!\n");
-                        index++;
-                        continue;
-                    }
-
-                    SetCoeff(polys[poly_id - 1], index, &coeff);
-
-                    printf("\n");
-                }
-
-                printf("Succesfull create complex polynomial!\n");
-                printf("New polynomials:\n");
-
-                PrintPolynomial(polys[poly_id - 1]);
-                printf("\n");
-                break;
-
-            default:
-                printf("Error! Invalid input\n");
-                continue;
-                break;
-            }
-
+            create_poly_in_menu(polys, &poly_id);
             break;
-        
         }
-        
+
         case 2: // Set coefficient
         {
-            if (poly_id == 0)
-            {
-                printf("ERROR! Not a polynomial has been created\n");
-                continue;
-            }
-
-            printf("There are %d polynomials now\n", poly_id);
-            PrintListOfPolynomials(polys, poly_id);
-            printf("Which polynomials do you want to select?\nChoice:  ");
-
-            int poly_number;
-            
-            if (!IntField->read(&poly_number))
-            {
-                printf("ERROR! Invalid input\n");
-                continue;
-            }
-            printf("\n");
-
-            if (poly_number > poly_id || poly_number <= 0)
-            {
-                printf("ERROR! Wrong number\n");
-                continue;
-            }
-
-            Polynomial* poly = polys[poly_number - 1];
-            int coeff_number;
-
-            printf("There are %d coefficients of the polynomial\nWhich coefficient (0 - %d) do you want to select?\nChoice:  ", (int)poly->degree + 1, (int)poly->degree);
-
-            if (!IntField->read(&coeff_number))
-            {
-                printf("ERROR! Invalid input\n");
-                continue;
-            }
-            printf("\n");
-
-            if (coeff_number > (int)poly->degree || coeff_number < 0)
-            {
-                printf("ERROR! Wrong coefficient\n");
-                continue;
-            }
-
-            if (poly->polynomial_type == IntField)
-            {
-                printf("Polynomial's type is integer\nWrite coefficient value:  ");
-                int data;
-
-                if (!IntField->read(&data)) 
-                {
-                    printf("ERROR! Wrong input\n");
-                    continue;
-                }
-                printf("\n");
-
-                SetCoeff(poly, coeff_number, &data);
-                printf("Succesfull set coefficient!\n");
-            }
-
-            if (poly->polynomial_type == ComplexField)
-            {
-                Complex data;
-                printf("Polynomial's type is complex\nWrite coefficient value (real and image part in different string):  ");
-
-                if(!ComplexField->read(&data))
-                {
-                    printf("ERROR! Invalid input\n");
-                    continue;
-                }
-                printf("\n");
-
-                SetCoeff(poly, coeff_number, &data);
-
-                printf("Succesfull set coefficient!\n");
-            }
-
+            set_coef_in_menu(polys, &poly_id);
             break;
         }
 
         case 3: // Print polynomial
         {
-        
-            if (poly_id == 0)
-            {
-                printf("ERROR! Not a polynomial has been created\n");
-                continue;
-            }
-
-            printf("There are %d polynomials now\n", poly_id);
-            PrintListOfPolynomials(polys, poly_id);
-            printf("Which polynomials do you want to select?\nChoice:  ");
-
-            int poly_number;
-            
-            if (!IntField->read(&poly_number))
-            {
-                printf("ERROR! Invalid input\n");
-                continue;
-            }
-            printf("\n");
-
-            if (poly_number > poly_id || poly_number <= 0)
-            {
-                printf("ERROR! Wrong number\n");
-                continue;
-            }
-            
-            printf("Polynomial %d:\n", poly_number);
-            PrintPolynomial(polys[poly_number - 1]);
-            printf("\n");
-
+            if (poly_id == 0) { printf("ERROR!\n"); continue; }
+            print_list_of_polynomials(polys, poly_id);
             break;
-
         }
 
-        case 4: // Find value at point
+        case 4: // Evaluate
         {
-
-            if (poly_id == 0)
-            {
-                printf("ERROR! Not a polynomial has been created\n");
-                continue;
-            }
-
-            printf("There are %d polynomials now\n", poly_id);
-            PrintListOfPolynomials(polys, poly_id);
-            printf("Which polynomials do you want to select?\nChoice:  ");
-            int poly_number;
-            
-            if (!IntField->read(&poly_number))
-            {
-                printf("ERROR! Invalid input\n");
-                continue;
-            }
-            printf("\n");
-
-            if (poly_number > poly_id || poly_number <= 0)
-            {
-                printf("ERROR! Wrong number\n");
-                continue;
-            }
-
-            Polynomial* poly = polys[poly_number - 1];
-
-            if (poly->polynomial_type == IntField)
-            {
-                printf("This polynomial has integer type\nWrite integer dot, where find value:  ");
-                int dot;
-
-                if (!IntField->read(&dot))
-                {
-                    printf("ERROR! Wrong input\n");
-                    continue;
-                }
-
-                printf("\n");
-
-                int result;
-
-                EvaluatePolynomial(poly, &dot, &result);
-                printf("Value of polynomial at the dot  %d  is  %d\n", dot, result);
-            }
-
-            if (poly->polynomial_type == ComplexField)
-            {
-                Complex dot;
-                printf("Polynomial's type is complex\nWrite coefficient value (real and image part in different string):  ");
-
-                if(!ComplexField->read(&dot))
-                {
-                    printf("ERROR! Invalid input\n");
-                    continue;
-                }
-                printf("\n");
-
-                Complex* result = malloc(sizeof(Complex));
-
-                EvaluatePolynomial(poly, &dot, result);
-
-                printf("Value of polynomial at the dot  ");
-                ComplexField->print(&dot);
-                printf("  is  ");
-                ComplexField->print(result);
-                printf("\n");
-                free(result);
-
-            }
-
+            evaluate_polynomial_in_menu(polys, &poly_id);
             break;
-
         }
 
-        case 5: // Add 2 polynomials
+        case 5: // Add
         {
-            if (poly_id <= 1)
-            {
-                printf("Too few polynomials\n");
-                continue;
-            }
-
-            int first_num, second_num;
-
-            printf("There are %d polynomials\n", poly_id);
-            PrintListOfPolynomials(polys, poly_id);
-            printf("Write first polynomial:   ");
-
-            if (!IntField->read(&first_num))
-            {
-                printf("ERROR! Invalid input\n");
-                continue;
-            }
-
-            if (first_num > poly_id || first_num <= 0)
-            {
-                printf("ERROR! Wrong number\n");
-                continue;
-            }
-
-            printf("\n");
-            printf("Write second polynomial:   ");
-
-            if (!IntField->read(&second_num))
-            {
-                printf("ERROR! Invalid input\n");
-                continue;
-            }
-
-            if (second_num > poly_id || second_num <= 0)
-            {
-                printf("ERROR! Wrong number\n");
-                continue;
-            }
-
-            printf("\n");
-
-            if (polys[first_num - 1]->polynomial_type != polys[second_num - 1]->polynomial_type)
-            {
-                printf("ERROR! Different types of polynomials\n");
-                continue;
-            }
-
-            Polynomial* poly1 = polys[first_num - 1];
-            Polynomial* poly2 = polys[second_num - 1];
-
-            Polynomial* add_pol = CreatePolynomial(poly1->polynomial_type, poly1->degree >= poly2->degree ? (int)poly1->degree : (int)poly2->degree);
-
-            AddPolynomial(poly1, poly2, add_pol);
-
-            polys[poly_id++] = add_pol;
-
-            printf("Succesfull add polynomials!\n");
-            printf("New polynomials:\n");
-
-            PrintPolynomial(poly1);
-
-            printf("  +  ");
-
-            PrintPolynomial(poly2);
-
-            printf("  =  ");
-
-            PrintPolynomial(add_pol);
-
-            printf("\n");
-
+            add_polynomials_in_menu(polys, &poly_id);
             break;
         }
 
-        case 6: // Mulitple scalar
+        case 6: // Mult scalar
         {
-
-            if (poly_id == 0)
-            {
-                printf("ERROR! Not a polynomial has been created\n");
-                continue;
-            }
-
-            printf("There are %d polynomials now\n", poly_id);
-            PrintListOfPolynomials(polys, poly_id);
-            printf("Which polynomials do you want to select?\nChoice:  ");
-
-            int poly_number;
-            
-            if (!IntField->read(&poly_number))
-            {
-                printf("ERROR! Invalid input\n");
-                continue;
-            }
-            printf("\n");
-
-            if (poly_number > poly_id || poly_number < 0)
-            {
-                printf("ERROR! Wrong number\n");
-                continue;
-            }
-
-            Polynomial* poly = polys[poly_number - 1];
-
-            if (poly->polynomial_type == IntField)
-            {
-                printf("This polynomial has integer type\nWrite integer scalar:  ");
-                int dot;
-
-                if (!IntField->read(&dot))
-                {
-                    printf("ERROR! Wrong input\n");
-                    continue;
-                }
-
-                printf("\n");
-
-                int result;
-
-                MultScalar(poly, &dot);
-                printf("Succesfull multiply polynomial at scalar:  ");
-                PrintPolynomial(poly);
-                printf("\n");
-            }
-
-            if (poly->polynomial_type == ComplexField)
-            {
-                Complex dot;
-                printf("Polynomial's type is complex\nWrite complex scalar (real and image part in different string):  ");
-
-                if(!ComplexField->read(&dot))
-                {
-                    printf("ERROR! Invalid input\n");
-                    continue;
-                }
-                printf("\n");
-
-                MultScalar(poly, &dot);
-
-                printf("Succesfull multiply polynomial at scalar:  ");
-                PrintPolynomial(poly);
-                printf("\n");
-            }
-
+            mult_scalar_in_menu(polys, &poly_id);
             break;
-
         }
 
-        case 7: // Multiple polynomials
+        case 7: // Mult polys
         {
-
-            if (poly_id <= 1)
-            {
-                printf("Too few polynomials\n");
-                continue;
-            }
-
-            int first_num, second_num;
-
-            printf("There are %d polynomials\n", poly_id);
-            PrintListOfPolynomials(polys, poly_id);
-            printf("Write first polynomial:   ");
-
-            if (!IntField->read(&first_num))
-            {
-                printf("ERROR! Invalid input\n");
-                continue;
-            }
-
-            if (first_num > poly_id || first_num <= 0)
-            {
-                printf("ERROR! Wrong number\n");
-                continue;
-            }
-
-            printf("\n");
-            printf("Write second polynomial:   ");
-
-            if (!IntField->read(&second_num))
-            {
-                printf("ERROR! Invalid input\n");
-                continue;
-            }
-
-            if (second_num > poly_id || second_num <= 0)
-            {
-                printf("ERROR! Wrong number\n");
-                continue;
-            }
-
-            printf("\n");
-
-            if (polys[first_num - 1]->polynomial_type != polys[second_num - 1]->polynomial_type)
-            {
-                printf("ERROR! Different types of polynomials\n");
-                continue;
-            }
-
-            Polynomial* poly1 = polys[first_num - 1];
-            Polynomial* poly2 = polys[second_num - 1];
-
-            Polynomial* mult_pol = CreatePolynomial(poly1->polynomial_type, poly1->degree + poly2->degree);
-
-            MultPolynomial(poly1, poly2, mult_pol);
-
-            polys[poly_id++] = mult_pol;
-
-            printf("Succesfull multiple polynomials!\n");
-            printf("New polynomials:\n");
-
-            PrintPolynomial(poly1);
-
-            printf("  *  ");
-
-            PrintPolynomial(poly2);
-
-            printf("  =  ");
-
-            PrintPolynomial(mult_pol);
-
-            printf("\n");
-
+            mult_polynomial_in_menu(polys, &poly_id);
             break;
-
         }
 
-        case 8: // Derivative polynomial
+        case 8: // Derivative
         {
-
-            if (poly_id == 0)
-            {
-                printf("ERROR! Not a polynomial has been created\n");
-                continue;
-            }
-
-            printf("There are %d polynomials now\n", poly_id);
-            PrintListOfPolynomials(polys, poly_id);
-            printf("Which polynomials do you want to select?\nChoice:  ");
-            int poly_number;
-            
-            if (!IntField->read(&poly_number))
-            {
-                printf("ERROR! Invalid input\n");
-                continue;
-            }
-            printf("\n");
-
-            if (poly_number > poly_id || poly_number <= 0)
-            {
-                printf("ERROR! Wrong number\n");
-                continue;
-            }
-            
-            Polynomial* poly = polys[poly_number - 1];
-
-            Polynomial* diff_poly = DerivativeOfPolynomial(poly);
-
-            polys[poly_id++] = diff_poly;
-
-            printf("Succesfull took the derivative of the polynomial:  ");
-            PrintPolynomial(diff_poly);
-            printf("\n");
-
+            derivative_in_menu(polys, &poly_id);
             break;
         }
 
-
-        case 9:
-        {
-
-            test_complex();
-            test_int();
-
-            break;
-
-        }
-        
+        // case 9: // Tests
+        // {
+        //     test_complex();
+        //     test_int();
+        //     break;
+        // }
 
         default:
             printf("\nERROR! Invalid command.\n");
             continue;
-            break;
-
-        } // switch
-
-
-
-    } // WHile(1)
-
-} // void_menu()
+        }
+    }
+}

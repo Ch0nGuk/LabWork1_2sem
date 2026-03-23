@@ -9,9 +9,9 @@ typedef enum
     DOUBLE_TYPE
 } NumType;
 
-static char* StripStr(char* str);
-int ReadNum(void* str, NumType type);
-
+// Утилиты для работы со строками и числами
+static char* strip_str(char* str);
+int read_num(void* str, NumType type);
 
 typedef struct FieldInfo {
     size_t size;
@@ -29,10 +29,7 @@ typedef struct Complex {
     double im;
 } Complex;
 
-FieldInfo* GetIntFieldInfo();
+FieldInfo* get_int_field_info();
+FieldInfo* get_complex_field_info();
 
-FieldInfo* GetComplexFieldInfo();
-
-
-
-#endif 
+#endif

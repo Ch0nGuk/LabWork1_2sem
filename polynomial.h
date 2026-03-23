@@ -9,23 +9,16 @@ typedef struct Polynomial {
     int degree;
 } Polynomial;
 
-Polynomial* CreatePolynomial(FieldInfo* FInfo, int degree);
+Polynomial* create_polynomial(FieldInfo* f_info, int degree);
 
-void FreePolynomial(Polynomial* Poly);
+void free_polynomial(Polynomial* poly);
+void set_coeff(Polynomial* poly, int index, void* src);
+void print_polynomial(Polynomial* poly);
+void evaluate_polynomial(Polynomial* poly, void* dot, void* result);
+void add_polynomial(Polynomial* poly1, Polynomial* poly2, Polynomial* result_poly);
+void mult_scalar(Polynomial* poly, void* scalar);
+void mult_polynomial(Polynomial* poly1, Polynomial* poly2, Polynomial* result_poly);
 
-void SetCoeff(Polynomial* poly, int index, void* src);
-
-void PrintPolynomial(Polynomial* poly);
-
-void EvaluatePolynomial(Polynomial* poly, void* dot, void* result);
-
-void AddPolynomial(Polynomial* poly1, Polynomial* poly2, Polynomial* result_poly);
-
-void MultScalar(Polynomial* poly, void* scalar);
-
-void MultPolynomial(Polynomial* poly1, Polynomial* poly2, Polynomial* result_poly);
-
-Polynomial* DerivativeOfPolynomial(Polynomial* poly);
-
+Polynomial* derivative_of_polynomial(Polynomial* poly);
 
 #endif // POLYNOMIAL_H
