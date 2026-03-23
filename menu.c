@@ -108,12 +108,13 @@ void menu()
             break;
         }
 
-        // case 9: // Tests
-        // {
-        //     test_complex();
-        //     test_int();
-        //     break;
-        // }
+        case 9: // Tests
+        {
+            test_int();
+            test_complex();
+            test_error_handling();
+            break;
+        }
 
         default:
             printf("\nERROR! Invalid command.\n");
