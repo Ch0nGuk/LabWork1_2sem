@@ -471,7 +471,7 @@ void menu()
 
                 int result;
 
-                ScalarMult(poly, &dot);
+                MultScalar(poly, &dot);
                 printf("Succesfull multiply polynomial at scalar:  ");
                 PrintPolynomial(poly);
                 printf("\n");
@@ -489,7 +489,7 @@ void menu()
                 }
                 printf("\n");
 
-                ScalarMult(poly, &dot);
+                MultScalar(poly, &dot);
 
                 printf("Succesfull multiply polynomial at scalar:  ");
                 PrintPolynomial(poly);
@@ -553,9 +553,9 @@ void menu()
             Polynomial* poly1 = polys[first_num - 1];
             Polynomial* poly2 = polys[second_num - 1];
 
-            Polynomial* mult_pol = CreatePolynomial(poly1->polynomial_type, poly1->degree >= poly2->degree ? (int)poly1->degree : (int)poly2->degree);
+            Polynomial* mult_pol = CreatePolynomial(poly1->polynomial_type, poly1->degree + poly2->degree);
 
-            PolynomialMult(poly1, poly2, mult_pol);
+            MultPolynomial(poly1, poly2, mult_pol);
 
             polys[poly_id++] = mult_pol;
 

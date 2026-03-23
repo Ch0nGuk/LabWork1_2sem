@@ -21,9 +21,9 @@ void EvaluatePolynomial(Polynomial* poly, void* dot, void* result);
 
 void AddPolynomial(Polynomial* poly1, Polynomial* poly2, Polynomial* result_poly);
 
-void ScalarMult(Polynomial* poly, void* scalar);
+void MultScalar(Polynomial* poly, void* scalar);
 
-void PolynomialMult(Polynomial* poly1, Polynomial* poly2, Polynomial* result_poly);
+void MultPolynomial(Polynomial* poly1, Polynomial* poly2, Polynomial* result_poly);
 
 Polynomial* DerivativeOfPolynomial(Polynomial* poly);
 

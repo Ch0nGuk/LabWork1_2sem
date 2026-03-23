@@ -9,7 +9,7 @@
 static FieldInfo* INT_FIELD_INFO = NULL;
 static FieldInfo* COMPLEX_FIELD_INFO = NULL;
 
-static char* strip_str(char* str)
+static char* StripStr(char* str)
 // Функция, которая "раздевает" строку, то есть убирает у нее все пробелы, табы в начале и конце
 {
     char* end;
@@ -28,7 +28,7 @@ static char* strip_str(char* str)
 }
 
 
-int read_num(void* str, NumType type) // ОБЩАЯ ФУНКЦИЯ, которая считывает значение из буфера и сравнивает с типом данных. 
+int ReadNum(void* str, NumType type) // ОБЩАЯ ФУНКЦИЯ, которая считывает значение из буфера и сравнивает с типом данных. 
 // Возвращает 1 если введенное число и тип данных совпадают, 0 в обратном случае
 {
     char buffer[256]; // буффер
@@ -37,7 +37,7 @@ int read_num(void* str, NumType type) // ОБЩАЯ ФУНКЦИЯ, котора
 
     if (fgets(buffer, sizeof(buffer), stdin) == NULL) return 0;
 
-    clean_str = strip_str(buffer);
+    clean_str = StripStr(buffer);
     
     if (strlen(clean_str) == 0) return 0;
 
@@ -107,16 +107,16 @@ static void complex_print(void* element) {
 static int int_read(void* str)
 {
     int* ptr = (int*)str;
-    return read_num(ptr, INT_TYPE);
+    return ReadNum(ptr, INT_TYPE);
 }
 
 static int complex_read(void* str)
 {
     Complex* ptr = (Complex*)str;
-    return (read_num(&(ptr->re), DOUBLE_TYPE) && read_num(&(ptr->im), DOUBLE_TYPE));
+    return (ReadNum(&(ptr->re), DOUBLE_TYPE) && ReadNum(&(ptr->im), DOUBLE_TYPE));
 }
 
-static void DerivativeOperationInCoef_Complex(void* co, int degree, void* result)
+static void complex_derivative_operation(void* co, int degree, void* result)
 {
 
     Complex* coeff = (Complex*)co;
@@ -126,7 +126,7 @@ static void DerivativeOperationInCoef_Complex(void* co, int degree, void* result
 
 }
 
-static void DerivativeOperationInCoef_Int(void* co, int degree, void* result)
+static void int_derivative_operation(void* co, int degree, void* result)
 {
 
     int* coeff = (int*)co;
@@ -146,7 +146,7 @@ FieldInfo* GetIntFieldInfo() {
         INT_FIELD_INFO->mult = int_mul;
         INT_FIELD_INFO->print = int_print;
         INT_FIELD_INFO->read = int_read;
-        INT_FIELD_INFO->DerivativeOperationInCoef = DerivativeOperationInCoef_Int; 
+        INT_FIELD_INFO->derivop = int_derivative_operation; 
         INT_FIELD_INFO->size = sizeof(int);
     }
 
@@ -162,7 +162,7 @@ FieldInfo* GetComplexFieldInfo() {
         COMPLEX_FIELD_INFO->mult = complex_mult;
         COMPLEX_FIELD_INFO->print = complex_print;
         COMPLEX_FIELD_INFO->read = complex_read;
-        COMPLEX_FIELD_INFO->DerivativeOperationInCoef = DerivativeOperationInCoef_Complex;
+        COMPLEX_FIELD_INFO->derivop = complex_derivative_operation;
         COMPLEX_FIELD_INFO->size = sizeof(Complex);
     }
 

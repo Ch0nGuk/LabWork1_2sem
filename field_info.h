@@ -9,8 +9,8 @@ typedef enum
     DOUBLE_TYPE
 } NumType;
 
-static char* strip_str(char* str);
-int read_num(void* str, NumType type);
+static char* StripStr(char* str);
+int ReadNum(void* str, NumType type);
 
 
 typedef struct FieldInfo {
@@ -18,7 +18,7 @@ typedef struct FieldInfo {
 
     void (*add)(void* a, void* b, void* res);
     void (*mult)(void* a, void* b, void* res);
-    void (*DerivativeOperationInCoef)(void* co, int degree, void* result);
+    void (*derivop)(void* co, int degree, void* result);
 
     void (*print)(void* element);
     int (*read)(void *element);

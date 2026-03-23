@@ -131,7 +131,7 @@ void AddPolynomial(Polynomial* poly1, Polynomial* poly2, Polynomial* result_poly
 
 }
 
-void ScalarMult(Polynomial* poly, void* scalar) {
+void MultScalar(Polynomial* poly, void* scalar) {
 
     if (poly == NULL || scalar == NULL) {
         return;
@@ -188,15 +188,15 @@ Polynomial* DerivativeOfPolynomial(Polynomial* poly)
     if (poly->degree == 0)
     {
         Polynomial* diff_poly = CreatePolynomial(poly->polynomial_type, 0);
-        void* src = malloc(poly->polynomial_type->size);
+        // void* src = malloc(poly->polynomial_type->size);
 
-        if (src == NULL) return NULL;
+        // if (src == NULL) return NULL;
 
-        void* coeff = GetCoeffPtr(poly, 0);
-        poly->polynomial_type->DerivativeOperationInCoef(coeff, 0, src);
-        SetCoeff(diff_poly, 0, src);
+        // void* coeff = GetCoeffPtr(poly, 0);
+        // poly->polynomial_type->DerivativeOperationInCoef(coeff, 0, src);
+        // SetCoeff(diff_poly, 0, src);
 
-        free(src);
+        // free(src);
 
         return diff_poly;
     }
@@ -210,7 +210,7 @@ Polynomial* DerivativeOfPolynomial(Polynomial* poly)
     {
         void* tmp_coeff = GetCoeffPtr(poly, degree);
 
-        diff_poly->polynomial_type->DerivativeOperationInCoef(tmp_coeff, degree, diff_coeff);
+        diff_poly->polynomial_type->derivop(tmp_coeff, degree, diff_coeff);
 
         SetCoeff(diff_poly, degree - 1, diff_coeff);
     }

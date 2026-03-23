@@ -49,7 +49,7 @@ void test_int() {
     // 3. Умножение
     // (2x + 3) * (1x + 1) = 2x^2 + 5x + 3
     Polynomial* p_mult = CreatePolynomial(IntField, 2);
-    PolynomialMult(p1, p2, p_mult);
+    MultPolynomial(p1, p2, p_mult);
     
     printf("Multiplication: ("); PrintPolynomial(p1);
     printf(") * ("); PrintPolynomial(p2);
@@ -123,7 +123,7 @@ void test_complex() {
     // 3. Умножение
     // P1 * P2 = (-1+i)x^2 + (1+3i)x + 2
     Polynomial* p_mult = CreatePolynomial(ComplexField, 2);
-    PolynomialMult(p1, p2, p_mult);
+    MultPolynomial(p1, p2, p_mult);
     
     printf("Multiplication: ("); PrintPolynomial(p1);
     printf(") * ("); PrintPolynomial(p2);
