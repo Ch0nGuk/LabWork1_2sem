@@ -110,9 +110,16 @@ void menu()
 
         case 9: // Tests
         {
-            test_int();
-            test_complex();
-            test_error_handling();
+            test_int_create();
+            test_int_evaluate();
+            test_int_derivative();
+            test_complex_create();
+            test_complex_evaluate();
+            test_error_mismatched_types();
+            test_error_invalid_degree();
+            test_error_index_oob();
+            test_error_small_buffer_for_mult();
+            test_error_null_safety();
             break;
         }
 
@@ -122,3 +129,4 @@ void menu()
         }
     }
 }
+
